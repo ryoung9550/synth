@@ -8,11 +8,17 @@ struct StreamData
 	bool isEmpty;
 };
 
+typedef struct
+{
+	    float left_phase;
+		    float right_phase;
+}   
+paTestData;
+
 class AudioStream
 {
 public:
 	const static int BUFFER_SIZE = 256;
-private:
 
 	// Member Functions
 	static int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,  void *userData);
@@ -23,7 +29,6 @@ private:
 	StreamData* callbackData;
 	bool startSuccess = false;
 	int bufferQueueArrOffest = 0;
-public:
 	// Member Functions
 	AudioStream();
 	~AudioStream();
@@ -39,4 +44,4 @@ public:
 	bool running = false;
 };
 
-const static float BLANK_AUDIO[AudioStream::BUFFER_SIZE] = {0};
+const static float BLANK_AUDIO[AudioStream::BUFFER_SIZE] {0};

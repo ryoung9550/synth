@@ -3,6 +3,33 @@
 #include <cstring>
 #include "AudioStream.h"
 
+static int patestCallback( const void *inputBuffer, void *outputBuffer,
+                           unsigned long framesPerBuffer,
+                           const PaStreamCallbackTimeInfo* timeInfo,
+                           PaStreamCallbackFlags statusFlags,
+                           void *userData )
+{
+    /* Cast data passed through stream to our structure. */
+    paTestData *data = (paTestData*)userData; 
+    float *out = (float*)outputBuffer;
+    unsigned int i;
+    (void) inputBuffer; /* Prevent unused variable warning. */
+    
+    for( i=0; i<framesPerBuffer; i++ )
+    {
+        *out++ = data->left_phase;  /* left */
+        *out++ = data->right_phase;  /* right */
+        /* Generate simple sawtooth phaser that ranges between -1.0 and 1.0. */
+        data->left_phase += 0.01f;
+        /* When signal reaches top, drop back down. */
+        if( data->left_phase >= 1.0f ) data->left_phase -= 2.0f;
+        /* higher pitch so we can distinguish left and right. */
+        data->right_phase += 0.03f;
+        if( data->right_phase >= 1.0f ) data->right_phase -= 2.0f;
+    }
+    return 0;
+}
+
 AudioStream::AudioStream()
 {
 	PaError err = 0;
@@ -12,7 +39,7 @@ AudioStream::AudioStream()
 		return;
 	}
 
-	err = Pa_OpenDefaultStream(&stream, 0, 2, paFloat32, SAMPLE_RATE, BUFFER_SIZE, paCallback, this);
+	err = Pa_OpenDefaultStream(&stream, 0, 1, paFloat32, SAMPLE_RATE, BUFFER_SIZE, paCallback, this);
 	if(err != paNoError) {
 		fprintf(stderr, "PortAudio Error: %s\n", Pa_GetErrorText(err));
 		return;
@@ -60,11 +87,12 @@ int AudioStream::paCallback(const void*, void *outputBuffer, unsigned long, cons
 	if(thisAlt->emptyBuffer()) {
 		std::memcpy(outputBuffer, BLANK_AUDIO, BUFFER_SIZE);
 	} else {
-		thisAlt->running = false;
+		std::memcpy(outputBuffer, thisAlt->bufferQueue.front(), BUFFER_SIZE);
+		thisAlt->nextSample();
 	}
-	std::memcpy(outputBuffer, userData, BUFFER_SIZE);
 	return 0;
 }
+
 
 int AudioStream::sendAudio(float* audioStream, int size)
 {
