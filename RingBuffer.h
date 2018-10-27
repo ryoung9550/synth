@@ -1,4 +1,7 @@
+#ifndef _RING_BUFFER_H
+#define _RING_BUFFER_H
 
+#include <cstring>
 
 template<typename T, int size>
 class RingBuffer
@@ -20,5 +23,8 @@ public:
 			writeIndex = 0;
 		}
 		data[writeIndex++] = _data;
+		return 0;
 	}
 };
+
+#endif // _RING_BUFFER_H
