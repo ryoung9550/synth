@@ -27,10 +27,10 @@ class PitchGen
 {
 	size_t ret_arr_len;
 	float* buffer;
-	float* getSin(size_t frequency);
+	float* getSin(double frequency);
 public:
 	PitchGen(size_t arr_size);
-	float* getSin(const Pitch& pitch);
+	float* getSin(const Pitch& pitch, double octave);
 	float* getSawtooth(const Pitch& pitch);
 	size_t& getArrLen();
 };

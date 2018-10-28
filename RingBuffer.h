@@ -10,14 +10,14 @@ class RingBuffer
 	int readIndex = 0;
 	T data[size] {0};
 	unsigned WRdiff = 0;
-	const int BUFFPADDING = 1;
+	const int BUFFPADDING = 8000;
 public:
 	T read()
 	{
 		if(readIndex >= size) {
 			readIndex = 0;
 		}
-		if(WRdiff == 0) {
+		if(WRdiff <= BUFFPADDING) {
 			return 0;
 		}
 		WRdiff--;
@@ -28,7 +28,7 @@ public:
 		if(writeIndex >= size) {
 			writeIndex = 0;
 		}
-		while(WRdiff >= size - BUFFPADDING);
+		while(WRdiff >= size - BUFFPADDING /2);
 		WRdiff++;
 		data[writeIndex++] = _data;
 		return 0;
