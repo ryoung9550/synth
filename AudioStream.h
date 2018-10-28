@@ -38,7 +38,7 @@ public:
 
 	// Member Variables
 	const static int SAMPLE_RATE = 44100;
-	RingBuffer<float, 10000> buffer;
+	RingBuffer<float, 40000> buffer;
 	int sendAudio(float* audioStream, int size);
 	int stopAudio();
 };

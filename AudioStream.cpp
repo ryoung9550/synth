@@ -1,6 +1,7 @@
 #include <portaudio.h>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include "AudioStream.h"
 #include "RingBuffer.h"
 
@@ -44,7 +45,7 @@ AudioStream::~AudioStream()
 
 int AudioStream::paCallback(const void*, void *outputBuffer, unsigned long, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void* userData)
 {
-	RingBuffer<float, 10000>* ringBuffer = (RingBuffer<float, 10000>*) userData;
+	RingBuffer<float, 40000>* ringBuffer = (RingBuffer<float, 40000>*) userData;
 	float* out = (float*)outputBuffer;
 	for(int i = 0; i < BUFFER_SIZE; ++i) {
 		*out++ = ringBuffer->read();
@@ -58,6 +59,5 @@ int AudioStream::sendAudio(float* audioStream, int size)
 	for(int i = 0; i < size; ++i) {
 		buffer.write(audioStream[i]);
 	}
-	delete audioStream;
 	return 0;
 }
