@@ -23,8 +23,8 @@ int main()
 {
 	AudioStream stream;
 	float buffer[ARR_LEN] {0};
-	PitchGen pitchGen(200);
-	const int Repeat = 20;
+	PitchGen pitchGen(4000);
+	const int Repeat = 1;
 	for(int i = 0; i < Repeat; ++i) {
 		stream.sendAudio(pitchGen.getSin(Pitch::A, 3.0), pitchGen.getArrLen());
 	}
