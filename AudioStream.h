@@ -6,19 +6,6 @@
 #include "RingBuffer.h"
 	
 
-struct StreamData
-{
-	float* buffer;
-	bool isEmpty;
-};
-
-typedef struct
-{
-	    float left_phase;
-		    float right_phase;
-}   
-paTestData;
-
 class AudioStream
 {
 public:
@@ -29,7 +16,6 @@ private:
 
 	//Member Variables
 	PaStream* stream;
-	StreamData* callbackData;
 
 public:
 	// Member Functions
@@ -38,7 +24,7 @@ public:
 
 	// Member Variables
 	const static int SAMPLE_RATE = 44100;
-	RingBuffer<float, 40000> buffer;
+	RingBuffer<float, 10000> buffer;
 	int sendAudio(float* audioStream, int size);
 	int stopAudio();
 };

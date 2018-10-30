@@ -45,7 +45,7 @@ AudioStream::~AudioStream()
 
 int AudioStream::paCallback(const void*, void *outputBuffer, unsigned long, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void* userData)
 {
-	RingBuffer<float, 40000>* ringBuffer = (RingBuffer<float, 40000>*) userData;
+	RingBuffer<float, 10000>* ringBuffer = (RingBuffer<float, 10000>*) userData;
 	float* out = (float*)outputBuffer;
 	for(int i = 0; i < BUFFER_SIZE; ++i) {
 		*out++ = ringBuffer->read();
