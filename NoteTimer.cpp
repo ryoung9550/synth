@@ -43,8 +43,12 @@ double NoteTimer::getNoteLength(NoteValue note)
 	return retTime;
 }
 
+#ifdef NOTE_TIMER_TEST
+
 int main()
 {
 	NoteTimer timer(130, NoteValue::quarter);
 	std::cout << timer.getNoteLength(quarter) << '\n';
 }
+
+#endif
